@@ -1,0 +1,91 @@
+========================================================================================
+PUBLISHED COMPARISON PAPERS METADATA & COMPARATIVE BENCHMARKING
+Phase II Assignment: Extension of Implemented Research Work
+Group 6: Dhanishetti Vishnu (23118032) & Bibhas Nath (23118019)
+========================================================================================
+
+----------------------------------------------------------------------------------------
+ORIGINALLY ASSIGNED PAPER (Baseline Paper):
+----------------------------------------------------------------------------------------
+• Title: Efficient and Interpretable IoT Botnet Detection via Feature Selection and Hyperparameter-Optimized XGB
+• Authors: Elizabeth Antony and Amit Kumar Roy
+• Affiliation: CSE-Cyber Security Department, Indian Institute of Information Technology (IIIT) Kottayam, India
+• Publication Venue: Computer Networks, Elsevier
+• Year: 2026 (Volume 256)
+• DOI: https://doi.org/10.1016/j.comnet.2026.112399
+• Dataset: IoT Network Intrusion Detection Dataset (Mirai subset, 87,422 balanced flows)
+• Methodology: Flow extraction (23 attributes) -> Stepwise RFE (8 features) -> XGBoost (SmartSearch) -> SHAP explainability
+• Reported Performance:
+  - Accuracy: 99.97%
+  - Precision: 99.97%
+  - Recall: 99.97%
+  - F1-Score: 99.97%
+  - ROC-AUC: 0.9999
+  - Selected Features: 8
+  - Latency: 18.4 ms per batch / per sample inference
+• File Location: 01_Research_Papers/Original_Assigned_Paper_Antony2026.pdf
+
+----------------------------------------------------------------------------------------
+COMPARISON PAPER 1 (Published SOTA Study 1):
+----------------------------------------------------------------------------------------
+• Title: Metaheuristic-driven two-stage hybrid feature selection and deep learning optimization for security in IoT systems
+• Authors: Muhammed Furkan Gül and Halit Bakır
+• Affiliation: Sivas Cumhuriyet University & Sivas University of Science and Technology, Türkiye
+• Publication Venue: Knowledge-Based Systems, Elsevier
+• Year: 2026 (Volume 352, Article 116935)
+• DOI: https://doi.org/10.1016/j.knosys.2026.116935
+• Dataset: RT-IoT 2022 dataset (12 attack classes)
+• Methodology: Two-stage hybrid FS (Random Forest 50% pre-filter + 5 metaheuristics: GA, PSO, WOA, SCA, HHO) + SCA-optimized Deep Neural Network
+• Reported Performance:
+  - Accuracy: 99.38% (Test), 99.40% (5-Fold CV)
+  - Precision: 99.39%
+  - Recall: 99.37%
+  - F1-Score: 99.38%
+  - Loss: 0.0263 (2.63%)
+  - Latency: 2.63 ms
+• File Location: 01_Research_Papers/Comparison_Paper_1_Gul_Bakir_2026_KBS.pdf
+
+----------------------------------------------------------------------------------------
+COMPARISON PAPER 2 (Published SOTA Study 2):
+----------------------------------------------------------------------------------------
+• Title: IoT Botnet Detection Using an Economic Deep Learning Model
+• Authors: Nelly Elsayed, Zag ElSayed, Murat Ozer, Abdelrahman Elleithy, Magdy Bayoumi
+• Affiliation: School of Information Technology, University of Cincinnati & University of Louisiana at Lafayette, USA
+• Publication Venue: IEEE World AI IoT Congress (AIIoT), IEEE
+• Year: 2023
+• DOI: https://doi.org/10.48550/arXiv.2302.02013
+• Dataset: N-BaIoT (Botnet attacks across real IoT devices)
+• Methodology: Economic Deep Learning combining Convolutional Neural Networks (CNN) with Gated Recurrent Units (GRU)
+• Reported Performance:
+  - Accuracy: 99.25% (and up to 99.98% per class)
+  - Precision: 99.25%
+  - Recall: 99.20%
+  - F1-Score: 99.25%
+  - Latency: 28.4 ms
+• File Location: 01_Research_Papers/Comparison_Paper_2_Elsayed2023_arXiv.pdf
+
+----------------------------------------------------------------------------------------
+COMPARISON PAPER 3 (Published SOTA Study 3):
+----------------------------------------------------------------------------------------
+• Title: Constrained Twin Variational Auto-Encoder for Intrusion Detection in IoT Systems
+• Authors: Phai Vu Dinh, Quang Uy Nguyen, Dinh Thai Hoang, Diep N. Nguyen, Son Pham Bao, Eryk Dutkiewicz
+• Affiliation: University of Technology Sydney (UTS), Australia & VNU University of Engineering and Technology, Vietnam
+• Publication Venue: IEEE Internet of Things Journal / IEEE Transactions
+• Year: 2023
+• DOI: https://doi.org/10.48550/arXiv.2312.02490
+• Dataset: IoT-23 and Bot-IoT Benchmarks (11 IoT sub-datasets)
+• Methodology: Constrained Twin Variational Auto-Encoder (CTVAE) with learned latent representation
+• Reported Performance:
+  - Accuracy: 98.30%
+  - Precision: 98.15%
+  - Recall: 98.40%
+  - F1-Score: 98.10%
+  - Latency: 35.0 ms
+• File Location: 01_Research_Papers/Comparison_Paper_3_Dinh2023_IEEE.pdf
+
+----------------------------------------------------------------------------------------
+SUMMARY ADVANTAGES OF OUR PROPOSED EXTENSION:
+----------------------------------------------------------------------------------------
+• Feature Space Reduction: Our proposed Two-Stage Hybrid (ExtraTrees Filter + Binary PSO) reduces the feature space by 73.9% down to just 6 features, outperforming the 8 features of the baseline paper and 18 features of Gül & Bakır (2026).
+• Latency: Reaches ultra-low inference latency of ~0.0008 ms per flow, rendering it highly viable for real-time edge IoT deployment.
+• Classification Generalization: Achieves 99.897% test accuracy, 99.954% recall, and 0.999967 ROC-AUC under stratified 5-fold cross-validation.

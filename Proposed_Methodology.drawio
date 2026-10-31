@@ -1,0 +1,117 @@
+<mxfile host="app.diagrams.net" modified="2026-10-31T22:15:00.000Z" agent="Antigravity" version="24.0.0" type="device">
+  <diagram id="phase2_flowchart" name="Proposed Methodology">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Container Box 1: Feature Engineering & Preprocessing -->
+        <mxCell id="box_fe" value="Feature Engineering &amp; Preprocessing" style="swimlane;whiteSpace=wrap;html=1;dashed=1;dashPattern=5 5;fillColor=#f8f9fa;strokeColor=#4a5568;strokeWidth=2;fontStyle=1;fontSize=14;fontColor=#2d3748;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1480" height="340" as="geometry" />
+        </mxCell>
+
+        <!-- Node 1: Raw IoT Traffic -->
+        <mxCell id="n_raw" value="&lt;b&gt;IoT Network Traffic&lt;/b&gt;&lt;br&gt;IoT-NID Dataset&lt;br&gt;(18 PCAPs, 2.34M packets)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ebf8ff;strokeColor=#3182ce;strokeWidth=2;fontSize=12;fontColor=#2b6cb0;" vertex="1" parent="box_fe">
+          <mxGeometry x="40" y="90" width="160" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Node 2: Data Preprocessing & Balancing -->
+        <mxCell id="n_prep" value="&lt;b&gt;Data Preprocessing&lt;/b&gt;&lt;br&gt;• Flow Extraction (35 cols)&lt;br&gt;• Dropped Identifiers (23 cols)&lt;br&gt;• Random UnderSampling (RUS)&lt;br&gt;• 87,422 Balanced Flows" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#edf2f7;strokeColor=#4a5568;strokeWidth=2;fontSize=12;fontColor=#2d3748;" vertex="1" parent="box_fe">
+          <mxGeometry x="260" y="85" width="200" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Connector 1 -> 2 -->
+        <mxCell id="e_1_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2d3748;" edge="1" parent="box_fe" source="n_raw" target="n_prep">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Sub-box: PROPOSED EXTENSION: Two-Stage Hybrid Feature Selection -->
+        <mxCell id="box_prop_fs" value="[PROPOSED EXTENSION] Two-Stage Hybrid Feature Selection" style="swimlane;whiteSpace=wrap;html=1;dashed=1;dashPattern=3 3;fillColor=#fefcbf;strokeColor=#d69e2e;strokeWidth=2.5;fontStyle=1;fontSize=13;fontColor=#744210;startSize=28;" vertex="1" parent="box_fe">
+          <mxGeometry x="520" y="55" width="610" height="195" as="geometry" />
+        </mxCell>
+
+        <!-- Node 3a: Stage 1 Filter Preselection -->
+        <mxCell id="n_filter" value="&lt;b&gt;Stage 1: Filter Ranking&lt;/b&gt;&lt;br&gt;Mutual Information &amp;amp;&lt;br&gt;Extra-Trees Importance&lt;br&gt;&lt;i&gt;(Eliminates bottom 50% noise)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d69e2e;strokeWidth=2;fontSize=12;fontColor=#744210;" vertex="1" parent="box_prop_fs">
+          <mxGeometry x="30" y="45" width="220" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Node 3b: Stage 2 Binary Metaheuristic Wrapper -->
+        <mxCell id="n_meta_fs" value="&lt;b&gt;Stage 2: Metaheuristic Selection&lt;/b&gt;&lt;br&gt;Binary Swarm Optimizer&lt;br&gt;(Binary-adapted PSO / RIME)&lt;br&gt;&lt;i&gt;(Optimizes accuracy vs subset size)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#feebc8;strokeColor=#dd6b20;strokeWidth=2;fontSize=12;fontColor=#7b341e;" vertex="1" parent="box_prop_fs">
+          <mxGeometry x="340" y="45" width="240" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Connector 3a -> 3b -->
+        <mxCell id="e_filter_meta" value="Top 50%&#xa;Candidates" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#dd6b20;fontColor=#7b341e;fontSize=11;" edge="1" parent="box_prop_fs" source="n_filter" target="n_meta_fs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Connector 2 -> 3a -->
+        <mxCell id="e_prep_fs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2d3748;" edge="1" parent="box_fe" source="n_prep" target="box_prop_fs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node 4: Refined Feature Dataset -->
+        <mxCell id="n_refined" value="&lt;b&gt;Optimal Refined Feature Set&lt;/b&gt;&lt;br&gt;Minimal &amp;amp; High-Value&lt;br&gt;Candidate Features&lt;br&gt;&lt;i&gt;(Dimensionality Reduction &amp;gt; 70%)&lt;/i&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#c6f6d5;strokeColor=#38a169;strokeWidth=2;fontSize=12;fontColor=#22543d;" vertex="1" parent="box_fe">
+          <mxGeometry x="1200" y="85" width="220" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Connector 3b -> 4 -->
+        <mxCell id="e_fs_refined" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#38a169;" edge="1" parent="box_fe" source="box_prop_fs" target="n_refined">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Connector box_fe to box_mo -->
+        <mxCell id="e_fe_mo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2.5;strokeColor=#2d3748;" edge="1" parent="1" source="n_refined" target="n_tuning">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1350" y="440" />
+              <mxPoint x="200" y="440" />
+              <mxPoint x="200" y="550" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Container Box 2: Model Optimization, Evaluation & Interpretability -->
+        <mxCell id="box_mo" value="Model Optimization, Evaluation &amp;amp; Interpretability" style="swimlane;whiteSpace=wrap;html=1;dashed=1;dashPattern=5 5;fillColor=#f8f9fa;strokeColor=#4a5568;strokeWidth=2;fontStyle=1;fontSize=14;fontColor=#2d3748;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="40" y="480" width="1480" height="340" as="geometry" />
+        </mxCell>
+
+        <!-- Node 5: PROPOSED EXTENSION: Hyperparameter Optimization -->
+        <mxCell id="n_tuning" value="&lt;b&gt;[PROPOSED EXTENSION]&lt;/b&gt;&lt;br&gt;&lt;b&gt;Advanced Automated Tuning&lt;/b&gt;&lt;br&gt;• Bayesian Optuna / TPE Search&lt;br&gt;• Metaheuristic Optimizer (CPO)&lt;br&gt;• Tunes depth, LR, subsample, estimators" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e9d8fd;strokeColor=#805ad5;strokeWidth=2.5;fontSize=12;fontColor=#44337a;" vertex="1" parent="box_mo">
+          <mxGeometry x="60" y="85" width="260" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Node 6: Optimized Final Classifier -->
+        <mxCell id="n_model" value="&lt;b&gt;Best Optimized Classifier&lt;/b&gt;&lt;br&gt;Extreme Gradient Boosting (XGB)&lt;br&gt;+ Optional Stacking Ensemble&lt;br&gt;&lt;i&gt;(Trained with 5-Fold Stratified CV)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bee3f8;strokeColor=#3182ce;strokeWidth=2;fontSize=12;fontColor=#2a4365;" vertex="1" parent="box_mo">
+          <mxGeometry x="400" y="85" width="260" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Connector 5 -> 6 -->
+        <mxCell id="e_5_6" value="Optimal HPs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#805ad5;fontColor=#44337a;fontSize=11;" edge="1" parent="box_mo" source="n_tuning" target="n_model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node 7: Multi-Metric Performance Evaluation -->
+        <mxCell id="n_eval" value="&lt;b&gt;Rigorous Evaluation&lt;/b&gt;&lt;br&gt;• Accuracy, Precision, Recall, F1&lt;br&gt;• ROC-AUC Curve &amp;amp; Confusion Matrix&lt;br&gt;• Inference Latency (ms per packet)&lt;br&gt;• Benchmarking vs 3 SOTA Papers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#feebc8;strokeColor=#dd6b20;strokeWidth=2;fontSize=12;fontColor=#7b341e;" vertex="1" parent="box_mo">
+          <mxGeometry x="740" y="85" width="280" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Connector 6 -> 7 -->
+        <mxCell id="e_6_7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2d3748;" edge="1" parent="box_mo" source="n_model" target="n_eval">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node 8: Explainable AI & SHAP -->
+        <mxCell id="n_shap" value="&lt;b&gt;Model Interpretability (XAI)&lt;/b&gt;&lt;br&gt;• SHAP Global Summary (Beeswarm)&lt;br&gt;• Feature Contribution / Force Plots&lt;br&gt;• Trustworthiness &amp;amp; Security Alignment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fed7d7;strokeColor=#e53e3e;strokeWidth=2;fontSize=12;fontColor=#742a2a;" vertex="1" parent="box_mo">
+          <mxGeometry x="1100" y="85" width="280" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Connector 7 -> 8 -->
+        <mxCell id="e_7_8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#e53e3e;" edge="1" parent="box_mo" source="n_eval" target="n_shap">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

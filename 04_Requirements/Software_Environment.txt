@@ -1,0 +1,25 @@
+========================================================================================
+Software Environment Details - Phase II Research Extension
+========================================================================================
+Operating System: Windows 11 (64-bit)
+Python Version: Python 3.10+ (Tested on Python 3.14.0)
+Package Manager: pip 25.3+
+
+Key Packages & Versions:
+------------------------
+- numpy: 2.5.3
+- pandas: 3.0.6
+- scikit-learn: 1.9.1
+- xgboost: 3.4.1
+- scipy: 1.18.1
+- matplotlib: 3.11.2
+- seaborn: 0.13.2
+- openpyxl: 3.1.5
+- reportlab: 5.1.0
+- joblib: 1.6.0
+- pypdf: 6.20.0
+- imbalanced-learn: 0.14.2
+
+Installation:
+-------------
+pip install -r requirements.txt

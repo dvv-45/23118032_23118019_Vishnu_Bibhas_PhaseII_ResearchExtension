@@ -1,0 +1,7 @@
+Feature_Rank,Feature_Name
+1,udp.srcport
+2,ip.flags
+3,tcp.dstport
+4,ip.ttl
+5,ip.proto
+6,tcp

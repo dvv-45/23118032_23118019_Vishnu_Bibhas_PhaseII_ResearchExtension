@@ -1,0 +1,38 @@
+IoT Network Intrusion Detection Dataset - Source Details & Inventory
+========================================================================
+Assigned Research Paper:
+'Efficient and Interpretable IoT Botnet Detection via Feature Selection and Hyperparameter-Optimized XGB'
+Journal: Computer Networks, Elsevier, 2026 (DOI: 10.1016/j.comnet.2026.112399)
+
+Dataset Overview:
+-----------------
+Dataset Name: IoT Network Intrusion Detection Dataset (M.M. Alani 2022)
+Dataset Source: IEEE Dataport / Kaggle / Research Repository (Reference [9])
+Primary Experiment Focus: Mirai-focused subset
+
+PCAP & Traffic Statistics (Published Reference):
+------------------------------------------------
+Total Original PCAP Files: 18 captures (17 Mirai malicious captures + 1 benign capture)
+Total Packets Captured: ~2,339,621 packets (~2.34 million packets)
+Initial Extracted Features: 35 raw header attributes (reduced to 23 candidate features after drop)
+Post-RUS Balanced Dataset: 87,422 flow records (43,711 Benign [0], 43,711 Malicious [1])
+
+Target Labels:
+--------------
+0 = Benign Traffic
+1 = Malicious Traffic (Mirai Botnet Network Intrusion)
+
+Preprocessing Pipeline (Algorithm 2):
+--------------------------------------
+1. Host Identifiers Removed (10): eth.src, eth.dst, ip.src, ip.dst, arp.dst.proto_ipv4, arp.src.proto_ipv4, arp.src.hw_mac, arp.dst.hw_mac, ip.addr, eth.addr
+2. Utility Fields Removed (2): frame.number, ip.tos
+3. Missing Values: Numeric -> -1, Categorical -> 'unknown'
+4. Flag Conversions: tcp.flags and ip.flags converted to decimal
+5. Categorical Encoding: Label Encoding
+6. Duplicates: Duplicate flow records removed
+7. Balancing: Random UnderSampling (RUS) applied to achieve 50/50 class balance
+
+Handover & Reproducibility Note:
+--------------------------------
+If local raw PCAP files are present, extract_features.py processes them directly using TShark or Scapy.
+If PCAP files are absent, the dataset generator reproduces the exact statistical distributions of the 23 features and 87,422 balanced flow records to allow complete pipeline execution and model training.
