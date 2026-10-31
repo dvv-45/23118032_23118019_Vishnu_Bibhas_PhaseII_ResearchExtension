@@ -1,0 +1,20 @@
+{
+    "selected_features": [
+        "udp.srcport",
+        "ip.flags",
+        "tcp.dstport",
+        "ip.ttl",
+        "ip.proto",
+        "tcp"
+    ],
+    "num_selected": 6,
+    "target_column": "label",
+    "feature_descriptions": {
+        "udp.srcport": "UDP Source Port (Discriminates Mirai UDP flooding attacks targeting DNS/SSDP reflection)",
+        "ip.flags": "IP Fragmentation Flags (Distinguishes fragmented denial-of-service botnet bursts)",
+        "tcp.dstport": "TCP Destination Port (Detects Telnet 23/2323 credential harvesting and HTTP scanning)",
+        "ip.ttl": "IP Time-to-Live (Anomalous fixed hops characteristic of synthetic scanner bot generators)",
+        "ip.proto": "IP Protocol ID (Identifies transport protocol switches between UDP=17, TCP=6, ICMP=1)",
+        "tcp": "TCP Protocol Indicator flag (Differentiates stateful control channel traffic from raw floods)"
+    }
+}

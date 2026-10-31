@@ -1,0 +1,18 @@
+{
+    "random_seed": 42,
+    "dataset_name": "IoT Network Intrusion Detection Dataset (Mirai-focused)",
+    "balancing_method": "Random UnderSampling (RUS)",
+    "total_balanced_samples": 87422,
+    "train_samples": 69937,
+    "test_samples": 17485,
+    "split_ratio": "80:20 (Stratified)",
+    "proposed_feature_selection": {
+        "stage_1_filter": "Extra-Trees Ensemble Importance (Pruned bottom 50%)",
+        "stage_2_wrapper": "Binary Particle Swarm Optimization (B-PSO)",
+        "num_particles": 20,
+        "max_iterations": 25,
+        "inertia_weight": "0.9 linearly decreasing to 0.4",
+        "acceleration_coefficients": "c1 = 1.5, c2 = 1.5",
+        "fitness_function": "0.99 * (1 - F1) + 0.01 * (Fs / Fa) + protocol_penalty"
+    }
+}
