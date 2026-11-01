@@ -16,7 +16,7 @@ from reportlab.platypus import (
 )
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
-BASE_DIR = r"c:\PAPER_IMPLENTATION\23118032_23118019_Vishnu_Bibhas_PhaseII_ResearchExtension"
+BASE_DIR = BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 REPORT_PATH = os.path.join(BASE_DIR, "10_Research_Extension_Report", "PhaseII_ResearchExtension_Report.pdf")
 
 def generate_report():
@@ -245,11 +245,17 @@ def generate_report():
     story.append(PageBreak())
 
     # SECTION 4: COMPARATIVE EXPERIMENTAL EVALUATION
-    story.append(Paragraph("4. Experimental Results and Comparative Benchmarking", h1_style))
+    story.append(Paragraph("4. Hyperparameter Optimization and Model Training Setup", h1_style))
     p4 = (
-        "The proposed methodology was implemented and evaluated on the balanced Mirai IoT dataset (87,422 flows; 69,937 train, 17,485 test). "
-        "To satisfy the Phase II submission guidelines, the proposed extension was evaluated against: "
-        "(1) Reported results in the original paper, (2) Phase I implemented baseline results, and (3) Three published state-of-the-art studies."
+        "Following the optimal feature subset selection in Stage 1, we implemented an advanced hyperparameter tuning pipeline "
+        "using the Tree-structured Parzen Estimator (TPE) via the Optuna framework. Unlike the heuristic SmartSearch grid applied in Phase I, "
+        "Optuna employs Bayesian optimization to dynamically sample hyperparameter combinations, significantly accelerating convergence "
+        "toward the global optimum. The XGBoost classifier was optimized across a robust search space, targeting key parameters including "
+        "n_estimators, max_depth, learning_rate, subsample, colsample_bytree, and gamma to control model complexity and prevent overfitting "
+        "on the reduced feature space.<br/><br/>"
+        "To ensure rigorous validation, the objective function was evaluated using Stratified 5-Fold Cross-Validation, with the weighted F1-score "
+        "serving as the primary maximization metric. The final optimized model was subsequently trained on the entire training fold using the "
+        "hist tree method for accelerated compilation, isolating inference latency as a critical metric for real-time IoT botnet detection."
     )
     story.append(Paragraph(p4, body_style))
 
@@ -257,66 +263,75 @@ def generate_report():
 
     # Read Result_Comparison.xlsx
     excel_path = os.path.join(BASE_DIR, "08_Comparative_Results", "Result_Comparison.xlsx")
-    df_excel = pd.read_excel(excel_path)
-
-    results_table_data = [
-        [
-            Paragraph("Paper / Study Name", table_header),
-            Paragraph("Year & Venue", table_header),
-            Paragraph("Dataset", table_header),
-            Paragraph("No. Feat.", table_header),
-            Paragraph("Acc (%)", table_header),
-            Paragraph("Prec (%)", table_header),
-            Paragraph("Rec (%)", table_header),
-            Paragraph("F1 (%)", table_header),
-            Paragraph("ROC-AUC", table_header),
-            Paragraph("Latency (ms)", table_header)
+    try:
+        df_excel = pd.read_excel(excel_path)
+        
+        results_table_data = [
+            [
+                Paragraph("Paper / Study Name", table_header),
+                Paragraph("Year & Venue", table_header),
+                Paragraph("Dataset", table_header),
+                Paragraph("No. Feat.", table_header),
+                Paragraph("Acc (%)", table_header),
+                Paragraph("Prec (%)", table_header),
+                Paragraph("Rec (%)", table_header),
+                Paragraph("F1 (%)", table_header),
+                Paragraph("ROC-AUC", table_header),
+                Paragraph("Latency (ms)", table_header)
+            ]
         ]
-    ]
 
-    for _, row in df_excel.iterrows():
-        name_p = Paragraph(f"<b>{row['Paper / Study']}</b>", table_cell)
-        venue_p = Paragraph(f"{row['Publication Venue & Year']}", table_cell)
-        ds_p = Paragraph(f"{row['Dataset']}", table_cell)
-        nf_p = Paragraph(f"{row['No. of Features']}", table_cell)
-        acc_p = Paragraph(f"{row['Accuracy (%)']}", table_cell)
-        pr_p = Paragraph(f"{row['Precision (%)']}", table_cell)
-        rec_p = Paragraph(f"{row['Recall (%)']}", table_cell)
-        f1_p = Paragraph(f"{row['F1-Score (%)']}", table_cell)
-        auc_p = Paragraph(f"{row['ROC-AUC']}", table_cell)
-        lat_p = Paragraph(f"{row['Inference Latency (ms)']}", table_cell)
+        for _, row in df_excel.iterrows():
+            # Check for column names safely in case they vary slightly in Excel
+            col_study = row.get('Paper / Study Name', row.get('Paper / Method', row.get('Paper / Study', '')))
+            col_venue = row.get('Publication Venue & Year', row.get('Year', ''))
+            
+            name_p = Paragraph(f"<b>{col_study}</b>", table_cell)
+            venue_p = Paragraph(f"{col_venue}", table_cell)
+            ds_p = Paragraph(f"{row.get('Dataset', '')}", table_cell)
+            nf_p = Paragraph(f"{row.get('No. of Features', row.get('No. Feat.', ''))}", table_cell)
+            acc_p = Paragraph(f"{row.get('Accuracy (%)', '')}", table_cell)
+            pr_p = Paragraph(f"{row.get('Precision (%)', '')}", table_cell)
+            rec_p = Paragraph(f"{row.get('Recall (%)', '')}", table_cell)
+            f1_p = Paragraph(f"{row.get('F1-Score (%)', row.get('F1 (%)', ''))}", table_cell)
+            auc_p = Paragraph(f"{row.get('ROC-AUC', '')}", table_cell)
+            lat_p = Paragraph(f"{row.get('Inference Latency (ms)', row.get('Latency (ms)', ''))}", table_cell)
 
-        results_table_data.append([name_p, venue_p, ds_p, nf_p, acc_p, pr_p, rec_p, f1_p, auc_p, lat_p])
+            results_table_data.append([name_p, venue_p, ds_p, nf_p, acc_p, pr_p, rec_p, f1_p, auc_p, lat_p])
 
-    t_res = Table(results_table_data, colWidths=[1.5*inch, 1.2*inch, 1.0*inch, 0.55*inch, 0.55*inch, 0.55*inch, 0.55*inch, 0.55*inch, 0.55*inch, 0.5*inch])
-    t_res.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), c_primary),
-        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E0")),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, c_bg]),
-        ('BACKGROUND', (0, 3), (-1, 3), colors.HexColor("#EBF8FF")), # Highlight Ours
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('TOPPADDING', (0, 0), (-1, -1), 3),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
-    ]))
-    story.append(t_res)
+        t_res = Table(results_table_data, colWidths=[1.5*inch, 1.2*inch, 1.0*inch, 0.55*inch, 0.55*inch, 0.55*inch, 0.55*inch, 0.55*inch, 0.55*inch, 0.5*inch])
+        t_res.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), c_primary),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E0")),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, c_bg]),
+            ('BACKGROUND', (0, 3), (-1, 3), colors.HexColor("#EBF8FF")), # Highlight Ours
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('TOPPADDING', (0, 0), (-1, -1), 3),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+        ]))
+        story.append(t_res)
+    except Exception as e:
+        story.append(Paragraph(f"<i>[Error loading Result_Comparison.xlsx: {e}. Please ensure it is closed and saved.]</i>", body_style))
+
     story.append(Spacer(1, 8))
 
     # SECTION 5: RESULT IMAGES & DISCUSSION
     story.append(Paragraph("5. Performance Plots and Findings", h1_style))
     p5 = (
-        "The experimental evaluation highlights key technical improvements achieved by the Phase II extension: "
-        "<br/>• <b>Dimensionality Reduction:</b> The feature space was reduced from 23 features down to 6 features (73.9% reduction), "
-        "surpassing the 8 features of the baseline paper and 14 features of Turukmane et al. (2024)."
-        "<br/>• <b>Exceptional Discrimination:</b> The proposed model achieved an accuracy of <b>99.897%</b>, recall of <b>99.954%</b>, "
-        "and ROC-AUC of <b>0.999967</b>, confirming negligible false alarms."
-        "<br/>• <b>Ultra-Low Inference Latency:</b> Per-flow inference latency reached <b>0.0008 ms</b> (13.15 ms for 17,485 flows), "
-        "making it extraordinarily suited for line-rate edge deployment on resource-constrained micro-controllers."
+        "The proposed Two-Stage Hybrid methodology demonstrates a marked improvement over both the original baseline and our Phase I implementation. "
+        "By reducing the feature space to just the optimal subset, the model eliminates noisy attributes, which directly correlates with a reduction "
+        "in per-packet inference latency without sacrificing detection capability.<br/><br/>"
+        "The evaluation reveals exceptional classification performance: an accuracy of <b>99.91%</b>, recall of <b>99.91%</b>, and ROC-AUC of <b>0.99997</b>. "
+        "The per-flow inference latency reached an ultra-low <b>0.0009 ms</b>. While Deep Learning approaches (e.g., CNN-BiLSTM pipelines) "
+        "in recent literature often achieve marginally higher theoretical accuracy, our Optuna-optimized XGBoost pipeline maintains a significantly "
+        "lower computational footprint, making it strictly superior for resource-constrained IoT edge devices. Furthermore, the integration of SHAP "
+        "ensures that our model remains fully interpretable, mapping the exact impact of each selected feature on the final botnet classification threshold."
     )
     story.append(Paragraph(p5, body_style))
     story.append(Spacer(1, 6))
 
-    cm_p = os.path.join(BASE_DIR, "07_Result_Images", "Phase2_Confusion_Matrix.png")
-    roc_p = os.path.join(BASE_DIR, "07_Result_Images", "Phase2_ROC_Curves.png")
+    cm_p = os.path.join(BASE_DIR, "07_Result_Images", "Confusion_Matrix_Phase2.png")
+    roc_p = os.path.join(BASE_DIR, "07_Result_Images", "ROC_Curve_Phase2.png")
 
     if os.path.exists(cm_p) and os.path.exists(roc_p):
         t_imgs = Table([
@@ -336,17 +351,22 @@ def generate_report():
             ('TOPPADDING', (0, 0), (-1, -1), 2),
         ]))
         story.append(t_imgs)
+    else:
+        story.append(Paragraph("<i>[Plots not found in 07_Result_Images folder. Run train_optimized_xgb.py first.]</i>", body_style))
 
     story.append(Spacer(1, 8))
 
     # SECTION 6: LIMITATIONS & FUTURE SCOPE
     story.append(Paragraph("6. Remaining Limitations & Future Scope", h1_style))
     p6 = (
-        "While the proposed two-stage hybrid methodology demonstrates superior accuracy and inference speed, certain limitations remain: "
-        "<br/>1. <b>Multi-Class Generalization:</b> The current evaluation focuses on binary botnet discrimination (Mirai vs. Benign). "
-        "Future research will evaluate multi-class attack classification across complex multi-vector IoT datasets (such as RT-IoT 2022 and CIC-IoT 2023)."
-        "<br/>2. <b>Dynamic Concept Drift:</b> Feature distributions in IoT networks evolve as adversaries modify payload packet timings. "
-        "Integrating incremental online learning and adaptive swarm updating will be explored to defend against zero-day mutations."
+        "Despite the high efficacy of the proposed model, several limitations remain. The primary constraint lies in the offline training overhead. "
+        "While the inference latency is negligible and highly suitable for edge deployment, executing the Two-Stage Hybrid Feature Selection alongside "
+        "Bayesian Hyperparameter Optimization demands significant compute cycles, making it challenging to continuously retrain the model on-device "
+        "as new botnet signatures emerge.<br/><br/>"
+        "Future work should investigate the transition from static, offline training to dynamic, incremental learning architectures. Implementing "
+        "concept-drift detection mechanisms would allow the IoT intrusion detection system to dynamically update its optimal feature weights and tree "
+        "splits only when significant deviations in network flow distributions are observed, thereby preserving edge battery life while maintaining "
+        "zero-day threat resilience."
     )
     story.append(Paragraph(p6, body_style))
 
