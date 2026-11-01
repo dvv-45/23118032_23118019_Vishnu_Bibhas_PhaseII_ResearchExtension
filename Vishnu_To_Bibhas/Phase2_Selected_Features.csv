@@ -1,7 +1,7 @@
-Feature_Rank,Feature_Name
-1,udp.srcport
-2,ip.flags
-3,tcp.dstport
-4,ip.ttl
-5,ip.proto
-6,tcp
+Feature_Rank,Feature_Name,Domain_Security_Justification
+1,udp.srcport,Mirai UDP flood attack signature targeting reflective ephemeral DNS/SSDP ports.
+2,ip.flags,IP fragmentation bitmask manipulation used in anomalous buffer-overflow bursts.
+3,tcp.dstport,"Telnet brute-force exploit attempts targeting ports 23, 2323, and HTTP port 80."
+4,ip.ttl,Fixed static Time-To-Live hop-count signatures produced by automated bot scripts.
+5,ip.proto,"Identifies rapid transport protocol switching across TCP, UDP, and ICMP floods."
+6,tcp,Stateful TCP protocol indicator identifying incomplete handshakes vs. benign sessions.

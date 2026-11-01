@@ -1,20 +1,48 @@
 {
-    "selected_features": [
-        "udp.srcport",
-        "ip.flags",
-        "tcp.dstport",
-        "ip.ttl",
-        "ip.proto",
-        "tcp"
-    ],
-    "num_selected": 6,
-    "target_column": "label",
-    "feature_descriptions": {
-        "udp.srcport": "UDP Source Port (Discriminates Mirai UDP flooding attacks targeting DNS/SSDP reflection)",
-        "ip.flags": "IP Fragmentation Flags (Distinguishes fragmented denial-of-service botnet bursts)",
-        "tcp.dstport": "TCP Destination Port (Detects Telnet 23/2323 credential harvesting and HTTP scanning)",
-        "ip.ttl": "IP Time-to-Live (Anomalous fixed hops characteristic of synthetic scanner bot generators)",
-        "ip.proto": "IP Protocol ID (Identifies transport protocol switches between UDP=17, TCP=6, ICMP=1)",
-        "tcp": "TCP Protocol Indicator flag (Differentiates stateful control channel traffic from raw floods)"
+  "project": "IoT Botnet Detection via Feature Selection and Hyperparameter-Optimized XGB",
+  "phase": "Phase II Extension",
+  "stage_1_lead": "Dhanishetti Vishnu (23118032)",
+  "stage_2_lead": "Bibhas Nath (23118019)",
+  "num_selected_features": 6,
+  "selected_features": [
+    "udp.srcport",
+    "ip.flags",
+    "tcp.dstport",
+    "ip.ttl",
+    "ip.proto",
+    "tcp"
+  ],
+  "dimensionality_reduction_pct": 73.91304347826086,
+  "feature_details": [
+    {
+      "Feature_Rank": 1,
+      "Feature_Name": "udp.srcport",
+      "Domain_Security_Justification": "Mirai UDP flood attack signature targeting reflective ephemeral DNS/SSDP ports."
+    },
+    {
+      "Feature_Rank": 2,
+      "Feature_Name": "ip.flags",
+      "Domain_Security_Justification": "IP fragmentation bitmask manipulation used in anomalous buffer-overflow bursts."
+    },
+    {
+      "Feature_Rank": 3,
+      "Feature_Name": "tcp.dstport",
+      "Domain_Security_Justification": "Telnet brute-force exploit attempts targeting ports 23, 2323, and HTTP port 80."
+    },
+    {
+      "Feature_Rank": 4,
+      "Feature_Name": "ip.ttl",
+      "Domain_Security_Justification": "Fixed static Time-To-Live hop-count signatures produced by automated bot scripts."
+    },
+    {
+      "Feature_Rank": 5,
+      "Feature_Name": "ip.proto",
+      "Domain_Security_Justification": "Identifies rapid transport protocol switching across TCP, UDP, and ICMP floods."
+    },
+    {
+      "Feature_Rank": 6,
+      "Feature_Name": "tcp",
+      "Domain_Security_Justification": "Stateful TCP protocol indicator identifying incomplete handshakes vs. benign sessions."
     }
+  ]
 }
